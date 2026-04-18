@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.routes import user
-from app.database.db import engine, Base
+from routes import user
+from database.db import engine, Base
 app = FastAPI()
 
 # Create tables
