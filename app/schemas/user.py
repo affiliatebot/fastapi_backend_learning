@@ -1,8 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
-class User(BaseModel):
-    name: str
-    age: int
+class UserInput(BaseModel):
+    username: str
+    email:EmailStr
+    password:str
+
+class UserOutput(BaseModel):
+    id:int
+    username:str
+    email:EmailStr
 
     class Config:
-        orm_mode = True
+        from_attributes=True
