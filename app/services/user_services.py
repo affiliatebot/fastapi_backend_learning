@@ -10,7 +10,7 @@ from core.security import hash_password
 logger = logging.getLogger(__name__)
 
 def normalize(value: str) -> str:
-    return value.lower().strip()
+    return value.lower().strip() 
 
 def create_new_user(db: Session, user: UserInput):
 
