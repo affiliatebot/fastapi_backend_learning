@@ -4,23 +4,24 @@ import logging
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from models.user import User
-from schemas.user import UserInput
-from core.security import hash_password
+from schemas.user import UserInputSchema, UserLoginSchema
+from core.security import hash_password, verify_password
+from core.jwt_token import create_token
 
 logger = logging.getLogger(__name__)
 
-def normalize(value: str) -> str:
-    return value.lower().strip() 
+# def normalize(value: str) -> str:
+#     return value.lower().strip() 
 
-def create_new_user(db: Session, user: UserInput):
+def create_user(user: UserInputSchema,db: Session):
 
-    username = normalize(user.username)
-    email = normalize(user.email)
+    # username = normalize(user.username)
+    # email = normalize(user.email)
 
     try:
         db_user = User(
-            username=username,
-            email=email,
+            username=user.username,
+            email=user.email,
             password_hash=hash_password(user.password)
         )
 
@@ -52,3 +53,31 @@ def create_new_user(db: Session, user: UserInput):
             status_code=500,
             detail="Internal Server Error"
         )
+
+
+# login function
+def login(credentials:UserLoginSchema,db:Session):
+    
+    # fetch user data from db
+    db_user = (
+                db.query(User)
+               .filter(User.email == credentials.email).first()
+               )
+    if db_user == None:
+        raise Exception("Invalid credentials")
+    
+    # verify password
+    if not verify_password(plain_password=credentials.password,
+                           hash_password=db_user.password_hash):
+        
+        raise Exception("Invalid credentials")
+    
+    # generate token with user_id,expiry
+    payload = {"user_id":db_user.id}
+    token = create_token(payload)
+    
+    return {
+            "access_token": token,
+            "token_type": "bearer"
+            }
+

@@ -43,5 +43,8 @@ class User(Base):
     views = relationship("PostView",
                          foreign_keys="PostView.user_id",
                          back_populates="user")
+    # user.comments
+    comments = relationship("Comment", 
+                            back_populates="user")
     def __repr__(self):
         return f"<User id={self.id} username={self.username}>"

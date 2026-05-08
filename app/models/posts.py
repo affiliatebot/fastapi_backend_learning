@@ -39,7 +39,10 @@ class Post(Base):
     views = relationship("PostView",
                          foreign_keys="PostView.post_id",
                          back_populates="post")
-
+   
+    # post.comments
+    comments = relationship("Comment",
+                            back_populates="post")
     
     def __repr__(self):
         return f"<Post id = {self.id} Title = {self.title}>"

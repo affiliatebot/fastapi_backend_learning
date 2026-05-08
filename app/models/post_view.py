@@ -5,9 +5,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 
-class PostView(Base):
-
-    __tablename__ = "post_views"
+class View(Base):
+    # post view table
+    __tablename__ = "views"
 
     
     id = Column(Integer, primary_key=True, index=True)
@@ -19,13 +19,13 @@ class PostView(Base):
 
     # orm relationships
     
-    # postview.user
+    # view.user
 
     user = relationship("User",
                         foreign_keys=[user_id],
                         back_populates="views")
     
-    # postview.post
+    # view.post
     post = relationship("Post",
                         foreign_keys=[post_id],
                         back_populates="views")
