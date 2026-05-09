@@ -3,7 +3,8 @@ from fastapi import HTTPException
 import logging
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from models.user import User
+from models.users import User
+from models.posts import Post
 from schemas.user import UserInputSchema, UserLoginSchema
 from core.security import hash_password, verify_password
 from core.jwt_token import create_token
@@ -80,4 +81,3 @@ def login(credentials:UserLoginSchema,db:Session):
             "access_token": token,
             "token_type": "bearer"
             }
-

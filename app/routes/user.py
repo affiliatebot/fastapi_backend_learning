@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from dependencies import get_db
+from dependencies import get_db, get_current_user
 from schemas.user import UserInputSchema, UserOutputSchema, UserLoginSchema, TokenResponseSchema
-from models.user import User
-from services.user_services import create_user , login
+from models.users import User
+from services.user_services import create_user, login
 
 router = APIRouter()
 
@@ -21,7 +21,7 @@ def create_user_api(user: UserInputSchema, db: Session = Depends(get_db)):
 def login_api(credentials:UserLoginSchema, db:Session = Depends(get_db)):
     
     return login(credentials=credentials,db=db)
-    
+
 
 @router.get("/users")
 def get_users(db: Session = Depends(get_db)):
