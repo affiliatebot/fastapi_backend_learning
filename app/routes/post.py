@@ -3,15 +3,15 @@ from sqlalchemy.orm import Session
 from dependencies import get_db, get_current_user
 from schemas.post import *
 from models.users import User
-from services.post import get_posts, create_post ,edit_post
+from services.post import *
 
 router = APIRouter()
 
 
 # create a post
-@router.post("/posts",response_model=CreatePostOutputSchema,
+@router.post("/posts",response_model=CreatePostResponse,
                       status_code=201) # 201 -> created successfully
-def create_post_api(post:CreatePostInputSchema,
+def create_post_api(post:CreatePostRequest,
                     user:User=Depends(get_current_user),
                     db:Session=Depends(get_db)):
     
@@ -29,9 +29,17 @@ def edit_post_api(id:int,
                      user=user,
                      db=db)
 
+# delete a post
+@router.delete("/posts/{id}", response_model=DeletePostResponse)
+def delete_post_api(id:int,
+                    user:User=Depends(get_current_user),
+                    db:Session=Depends(get_db)):
+    
+    return delete_post(id=id, user=user, db=db)
+
 
 # get all posts 
-@router.get("/posts", response_model=[PostOutputSchema])
+@router.get("/posts", response_model=[PostsResponse])
 def get_post_api(limit:int=10,
                  offset:int=0,
                  user:User=Depends(get_current_user),

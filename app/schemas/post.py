@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 # output schema to get all posts
-class PostOutputSchema(BaseModel):
+class PostsResponse(BaseModel):
 
     id:int
     title:str
@@ -14,7 +14,7 @@ class PostOutputSchema(BaseModel):
         from_attributes=True
 
 # input schema to create post
-class CreatePostInputSchema(BaseModel):
+class CreatePostRequest(BaseModel):
 
     title: str = Field(
         min_length=3,
@@ -27,7 +27,7 @@ class CreatePostInputSchema(BaseModel):
     )# to not allow empty or blank spaces only and giant content
 
 # output schema to create post
-class CreatePostOutputSchema(BaseModel):
+class CreatePostResponse(BaseModel):
 
     id:int # post_id
     title:str
@@ -52,3 +52,9 @@ class EditPostResponse(BaseModel):
     title:str
     content:str
     updated_at:datetime
+
+###################################################################
+    
+class DeletePostResponse(BaseModel):
+
+    message:str
